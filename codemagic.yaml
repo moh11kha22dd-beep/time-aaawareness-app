@@ -1,0 +1,32 @@
+workflows:
+  android-debug:
+    name: Time Awareness Android Debug
+    max_build_duration: 60
+
+    environment:
+      node: lts
+      java: 17
+
+    scripts:
+      - name: Extract project
+        script: |
+          rm -rf app
+          mkdir app
+          unzip -q time-awareness-voltbuilder-v1.5.0.zip -d app
+
+      - name: Install Cordova
+        script: |
+          npm install -g cordova@12.0.0
+
+      - name: Prepare Android
+        script: |
+          cd app
+          cordova platform add android@14.0.0
+
+      - name: Build APK
+        script: |
+          cd app
+          cordova build android --debug
+
+    artifacts:
+      - app/platforms/android/app/build/outputs/apk/debug/*.apk
